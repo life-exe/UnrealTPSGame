@@ -144,3 +144,36 @@ void ATPSCharacter::MoveRight(float Value)
         AddMovementInput(Direction, Value);
     }
 }
+
+void ATPSCharacter::TestClangFormat(AActor* Actor)
+{
+    for (int32 i = 0; i < 10; ++i)
+    {
+    }
+
+    int32 value = 2;  // trail comment
+
+    if (true)
+    {
+    }
+
+    switch (value)
+    {
+        case 1: value++; break;
+        case 2:
+        {
+        }
+        break;
+
+        default: break;
+    }
+
+    const TArray<int32> A = {10, 20, 30, 40};
+    const int32 Sum1 = A[0] + A[1] + A[2] + A[3];
+
+    // clang-format off
+    const int32 Sum2 = A[0] + A[1] +
+                       A[2] + A[3];
+    AActor    *pointer{  nullptr};
+    // clang-format on
+}
