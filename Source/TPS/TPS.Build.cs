@@ -8,15 +8,15 @@ public class TPS : ModuleRules
     public TPS(ReadOnlyTargetRules Target) : base(Target)
     {
         // code in this file is written for demo purposes
-        Console.WriteLine("TPS module rules ---------------->");
+        /*Console.WriteLine("TPS module rules ---------------->");
         Console.WriteLine(
             "Unreal version {0}.{1}.{2}", Target.Version.MajorVersion, Target.Version.MinorVersion, Target.Version.PatchVersion);
         Console.WriteLine("Target platform {0}", Target.Platform);
         Console.WriteLine("Target type {0}", Target.Type);
-        Console.WriteLine("Branch name {0}", Target.Version.BranchName);
+        Console.WriteLine("Branch name {0}", Target.Version.BranchName);*/
 
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-        PublicDependencyModuleNames.AddRange(new string[]{"Core", "CoreUObject", "Engine", "InputCore"});
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
         if (Target.Type == TargetType.Editor)
         {

@@ -5,7 +5,7 @@ Simple C++ project from UE templates.
 To build game outside the Unreal Editor you can use this pattern:
 
 ```c++
-[UE4Path]/Engine/Build/BatchFiles/RunUAT.batBuildCookRun
+[UE4Path]/Engine/Build/BatchFiles/RunUAT.bat BuildCookRun
 -project=[projectPath].uproject
 -platform=[Platform]
 -clientconfig=[Configuration]

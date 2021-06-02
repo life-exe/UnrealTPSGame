@@ -8,7 +8,7 @@ public class TPSEditorTarget : TargetRules
 {
     public TPSEditorTarget(TargetInfo Target) : base(Target)
     {
-        Console.WriteLine("TPS editor target ---------------->");
+        // Console.WriteLine("TPS editor target ---------------->");
 
         Type = TargetType.Editor;
         DefaultBuildSettings = BuildSettingsVersion.V2;
