@@ -1,7 +1,2 @@
 @echo off
-CD Source
-FOR /R %%f IN (*.cpp, *.h, *.cs) DO (
-    clang-format -i %%f
-    echo %%f
-)
-PAUSE
+call "%~dp0devops\misc\format_all_files.bat"
