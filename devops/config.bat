@@ -14,7 +14,8 @@ set RunUATPath=%EnginePath_4.26_InstalledBuild%\Engine\Build\BatchFiles\RunUAT.b
 
 rem Project params
 set ProjectRoot=C:\_Projects\_Jenkins\TPS
-set ProjectName=TPS.uproject
+set ProjectPureName=TPS
+set ProjectName=%ProjectPureName%.uproject
 set ProjectPath=%ProjectRoot%\%ProjectName%
 
 rem Build params
@@ -26,3 +27,13 @@ rem Other params
 set SourceCodePath=%ProjectRoot%\Source
 set dirsToRemove=Intermediate DerivedDataCache Saved Binaries .vs Build
 set filesToRemove=*.sln
+
+rem Target params
+set COPYRIGHT_LINE=// Copyright Epic Games, Inc. All Rights Reserved.
+set EXTRA_MODULE_NAMES="%ProjectPureName%"
+set TargetTemplateFilePath=%ProjectRoot%\devops\targets\GameModule.Target.cs.template
+
+rem Run
+set ServerExePath=%ProjectRoot%\Build\WindowsServer\%ProjectPureName%Server.exe
+set ClientExePath=%ProjectRoot%\Build\WindowsClient\%ProjectPureName%Client.exe
+set GameExePath=%ProjectRoot%\Build\WindowsNoEditor\%ProjectPureName%.exe
