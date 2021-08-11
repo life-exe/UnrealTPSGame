@@ -1,13 +1,19 @@
 {
-  "FileVersion": 3,
-  "EngineAssociation": "4.26",
-  "Category": "",
-  "Description": "",
-  "Modules": [
-    {
-      "Name": "TPS",
-      "Type": "Runtime",
-      "LoadingPhase": "Default"
-    }
-  ]
+	"FileVersion": 3,
+	"EngineAssociation": "4.26",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "TPS",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "FunctionalTestingEditor",
+			"Enabled": true
+		}
+	]
 }

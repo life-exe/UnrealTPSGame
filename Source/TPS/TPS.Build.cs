@@ -27,5 +27,7 @@ public class TPS : ModuleRules
         {
             PublicDefinitions.Add("MY_VR_MACRO=0");
         }
+
+        PublicIncludePaths.Add("TPS");
     }
 }
