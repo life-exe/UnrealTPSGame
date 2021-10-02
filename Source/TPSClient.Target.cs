@@ -1,6 +1,8 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// My game copyright
+
 using UnrealBuildTool;
 using System.Collections.Generic;
+
 public class TPSClientTarget : TargetRules
 {
     public TPSClientTarget(TargetInfo Target) : base(Target)

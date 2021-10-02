@@ -28,7 +28,7 @@ bool FFibonacciSimple::RunTest(const FString& Parameters)
     TestTrueExpr(UScienceFuncLib::Fibonacci(2) == 1);
     TestTrueExpr(UScienceFuncLib::Fibonacci(3) == 2);
 
-    const TArray<TPSGame::TestPayload<int32, int32>> TestData{{0, 0}, {1, 1}, {2, 1}, {3, 2}, {4, 3}, {5, 5}};
+    const TArray<TPS::Test::TestPayload<int32, int32>> TestData{{0, 0}, {1, 1}, {2, 1}, {3, 2}, {4, 3}, {5, 5}};
     for (const auto Data : TestData)
     {
         // TestTrueExpr(UScienceFuncLib::Fibonacci(Data.TestValue) == Data.ExpectedValue);

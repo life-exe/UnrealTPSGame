@@ -1,8 +1,8 @@
 %COPYRIGHT_LINE%
-
+NEW_LINE
 using UnrealBuildTool;
 using System.Collections.Generic;
-
+NEW_LINE
 public class %MODULE_NAME%%TARGET_TYPE%Target : TargetRules
 {
 	public %MODULE_NAME%%TARGET_TYPE%Target(TargetInfo Target) : base(Target)

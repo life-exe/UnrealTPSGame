@@ -29,7 +29,7 @@ set dirsToRemove=Intermediate DerivedDataCache Saved Binaries .vs Build
 set filesToRemove=*.sln
 
 rem Target params
-set COPYRIGHT_LINE=// Copyright Epic Games, Inc. All Rights Reserved.
+set COPYRIGHT_LINE=// My game copyright
 set EXTRA_MODULE_NAMES="%ProjectPureName%"
 set TargetTemplateFilePath=%ProjectRoot%\devops\targets\GameModule.Target.cs.template
 
