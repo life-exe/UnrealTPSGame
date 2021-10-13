@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TPSCharacter.generated.h"
 
+class UTPSInventoryComponent;
+
 UCLASS(config = Game)
 class ATPSCharacter : public ACharacter
 {
@@ -68,6 +70,10 @@ public:
     FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
     /** Returns FollowCamera subobject **/
     FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+protected:
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UTPSInventoryComponent* InventoryComponent;
 
 private:
     void TestClangFormat(AActor* Actor);
