@@ -1,12 +1,12 @@
 @echo off
 
-del /q %TargetFilePath%
+del /q "%TargetFilePath%"
 
-for /f "tokens=*" %%a in (%TargetTemplateFilePath%) do (
+for /f "tokens=*" %%a in ("%TargetTemplateFilePath%") do (
      if %%a == NEW_LINE (
         echo.>>%TargetFilePath%
     ) else (
-        call echo %%a>>%TargetFilePath%
+        call echo %%a>>"%TargetFilePath%"
     )
 )
 
