@@ -1,6 +1,6 @@
 // My game copyright
 
-#if (WITH_DEV_AUTOMATION_TESTS || WITH_PERF_AUTOMATION_TESTS)
+#if WITH_AUTOMATION_TESTS
 
 #include "TPS/Tests/TPSInventoryComponentTests.h"
 #include "CoreMinimal.h"
@@ -9,7 +9,7 @@
 #include "TPS/TPSTypes.h"
 #include "TPS/Tests/TestUtils.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FComponentCouldBeCreated, "TPSGame.Components.Inventory.ComponentCouldBeCreated",
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FComponentCantBeCreated, "TPSGame.Components.Inventory.ComponentCantBeCreated",
     EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority);
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FItemScoresShouldBeZerosByDefault, "TPSGame.Components.Inventory.ItemScoresShouldBeZerosByDefault",
@@ -46,7 +46,7 @@ TMap<EInventoryItemType, int32> InitLimits(UTPSInventoryComponentTestable* InvCo
 
 }  // namespace
 
-bool FComponentCouldBeCreated::RunTest(const FString& Parameters)
+bool FComponentCantBeCreated::RunTest(const FString& Parameters)
 {
     const UTPSInventoryComponent* InvComp = NewObject<UTPSInventoryComponent>();
     if (!TestNotNull("Inventory component exists", InvComp)) return false;

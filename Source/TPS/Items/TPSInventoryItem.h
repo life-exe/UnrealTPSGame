@@ -9,7 +9,7 @@
 
 class USphereComponent;
 
-UCLASS()
+UCLASS(Abstract)
 class TPS_API ATPSInventoryItem : public AActor
 {
     GENERATED_BODY()
