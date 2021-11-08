@@ -31,7 +31,7 @@ if %UserConfirmed% == E goto:EOF
 if %UserConfirmed% == e goto:EOF
 
 rem create dir
-if not exist %TestAbsoluteDir% mkdir %TestAbsoluteDir%
+if not exist "%TestAbsoluteDir%" mkdir "%TestAbsoluteDir%"
 
 rem full paths .h / .cpp template files
 set TestCppTemplateFilePath=%ProjectRoot%\devops\tests\templates\Test.cpp.template
@@ -46,12 +46,12 @@ set "OR=^|"
 set "AND=^&"
 
 rem remove old files if exist
-del /q %TestCppFilePath%
-del /q %TestHFilePath%
+del /q "%TestCppFilePath%"
+del /q "%TestHFilePath%"
 
 rem create actual files
-call :createTemplate %TestCppTemplateFilePath% , %TestCppFilePath%
-call :createTemplate %TestHTemplateFilePath% , %TestHFilePath%
+call :createTemplate "%TestCppTemplateFilePath%" , "%TestCppFilePath%"
+call :createTemplate "%TestHTemplateFilePath%" , "%TestHFilePath%"
 
 rem clang-format
 call "%~dp0\..\misc\format_all_files.bat"
@@ -63,12 +63,12 @@ rem function to create .h / .cpp from template
 :createTemplate
 set TemplateName=%~1
 set FileToWriteIn=%~2
-for /f "tokens=*" %%a in (%TemplateName%) do (
+for /f "usebackq tokens=*" %%a in ("%TemplateName%") do (
     if %%a == NEW_LINE (
-        echo.>>%FileToWriteIn%
+        echo.>>"%FileToWriteIn%"
     ) else (
         echo %%a
-        call echo %%a>>%FileToWriteIn%
+        call echo %%a>>"%FileToWriteIn%"
     )
 )
 
