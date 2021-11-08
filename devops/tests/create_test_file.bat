@@ -67,7 +67,6 @@ for /f "usebackq tokens=*" %%a in ("%TemplateName%") do (
     if %%a == NEW_LINE (
         echo.>>"%FileToWriteIn%"
     ) else (
-        echo %%a
         call echo %%a>>"%FileToWriteIn%"
     )
 )
