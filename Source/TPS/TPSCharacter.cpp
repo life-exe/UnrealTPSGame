@@ -13,6 +13,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "TPS/Components/TPSInventoryComponent.h"
+#include "TimerManager.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ATPSCharacter
@@ -38,13 +39,13 @@ ATPSCharacter::ATPSCharacter()
     GetCharacterMovement()->AirControl = 0.2f;
 
     // Create a camera boom (pulls in towards the player if there is a collision)
-    CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+    CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
     CameraBoom->SetupAttachment(RootComponent);
     CameraBoom->TargetArmLength = 300.0f;        // The camera follows at this distance behind the character
     CameraBoom->bUsePawnControlRotation = true;  // Rotate the arm based on the controller
 
     // Create a follow camera
-    FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+    FollowCamera = CreateDefaultSubobject<UCameraComponent>("FollowCamera");
     FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);  // Attach the camera to the end of the boom and let the
                                                                                  // boom adjust to match the controller orientation
     FollowCamera->bUsePawnControlRotation = false;                               // Camera does not rotate relative to arm
@@ -58,7 +59,7 @@ ATPSCharacter::ATPSCharacter()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void ATPSCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void ATPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     // Set up gameplay key bindings
     check(PlayerInputComponent);
@@ -121,7 +122,7 @@ void ATPSCharacter::LookUpAtRate(float Rate)
 
 void ATPSCharacter::MoveForward(float Value)
 {
-    if ((Controller != nullptr) && (Value != 0.0f))
+    if (Controller && Value != 0.0f)
     {
         // find out which way is forward
         const FRotator Rotation = Controller->GetControlRotation();
@@ -135,7 +136,7 @@ void ATPSCharacter::MoveForward(float Value)
 
 void ATPSCharacter::MoveRight(float Value)
 {
-    if ((Controller != nullptr) && (Value != 0.0f))
+    if (Controller && Value != 0.0f)
     {
         // find out which way is right
         const FRotator Rotation = Controller->GetControlRotation();
@@ -146,6 +147,70 @@ void ATPSCharacter::MoveRight(float Value)
         // add movement in that direction
         AddMovementInput(Direction, Value);
     }
+}
+
+void ATPSCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+
+    check(HealthData.MaxHealth > 0.0f);
+    Health = HealthData.MaxHealth;
+
+    OnTakeAnyDamage.AddDynamic(this, &ATPSCharacter::OnAnyDamageRecieved);
+}
+
+float ATPSCharacter::GetHealthPercent() const
+{
+    return Health / HealthData.MaxHealth;
+}
+
+void ATPSCharacter::OnAnyDamageRecieved(
+    AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+    const auto IsAlive = [&]() { return Health > 0.0f; };
+
+    if (Damage <= 0.0f || !IsAlive()) return;
+
+    Health = FMath::Clamp(Health - Damage, 0.0f, HealthData.MaxHealth);
+
+    if (IsAlive())
+    {
+        GetWorldTimerManager().SetTimer(HealTimerHandle, this, &ATPSCharacter::OnHealing, HealthData.HealRate, true, -1.0f);
+    }
+    else
+    {
+        OnDeath();
+    }
+}
+
+void ATPSCharacter::OnHealing()
+{
+    Health = FMath::Clamp(Health + HealthData.HealModifier, 0.0f, HealthData.MaxHealth);
+    if (FMath::IsNearlyEqual(Health, HealthData.MaxHealth))
+    {
+        Health = HealthData.MaxHealth;
+        GetWorldTimerManager().ClearTimer(HealTimerHandle);
+    }
+}
+
+void ATPSCharacter::OnDeath()
+{
+    GetWorldTimerManager().ClearTimer(HealTimerHandle);
+
+    check(GetCharacterMovement());
+    check(GetCapsuleComponent());
+    check(GetMesh());
+
+    GetCharacterMovement()->DisableMovement();
+    GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+    GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    GetMesh()->SetSimulatePhysics(true);
+    if (Controller)
+    {
+        Controller->ChangeState(NAME_Spectating);
+    }
+
+    SetLifeSpan(HealthData.LifeSpan);
 }
 
 void ATPSCharacter::TestClangFormat(AActor* Actor)

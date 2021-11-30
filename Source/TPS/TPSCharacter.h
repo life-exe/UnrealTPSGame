@@ -4,9 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "TPS/TPSTypes.h"
 #include "TPSCharacter.generated.h"
 
 class UTPSInventoryComponent;
+class UDamageType;
+class AController;
+class USpringArmComponent;
+class UCameraComponent;
+class UInputComponent;
 
 UCLASS(config = Game)
 class ATPSCharacter : public ACharacter
@@ -15,11 +21,11 @@ class ATPSCharacter : public ACharacter
 
     /** Camera boom positioning the camera behind the character */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-    class USpringArmComponent* CameraBoom;
+    USpringArmComponent* CameraBoom;
 
     /** Follow camera */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-    class UCameraComponent* FollowCamera;
+    UCameraComponent* FollowCamera;
 
 public:
     ATPSCharacter();
@@ -62,19 +68,37 @@ protected:
 
 protected:
     // APawn interface
-    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
     // End of APawn interface
 
 public:
     /** Returns CameraBoom subobject **/
-    FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+    FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
     /** Returns FollowCamera subobject **/
-    FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+    FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     UTPSInventoryComponent* InventoryComponent;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
+    FHealthData HealthData;
+
+    UFUNCTION(BlueprintCallable, Category = "Health")
+    float GetHealthPercent() const;
+
+    virtual void BeginPlay() override;
+
 private:
+    float Health{0.0f};
+    FTimerHandle HealTimerHandle;
+
+    UFUNCTION()
+    void OnAnyDamageRecieved(
+        AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
+
+    void OnHealing();
+    void OnDeath();
+
     void TestClangFormat(AActor* Actor);
 };
