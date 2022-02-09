@@ -49,6 +49,21 @@ UWorld* GetTestGameWorld();
 
 void CallFuncByNameWithParams(UObject* Object, const FString& FuncName, const TArray<FString>& Params);
 
+class FTPSUntilLatentCommand : public IAutomationLatentCommand
+{
+public:
+    FTPSUntilLatentCommand(TFunction<void()> InCallback, TFunction<void()> InTimeoutCallback, float InTimeout = 5.0f);
+    virtual bool Update() override;
+
+private:
+    TFunction<void()> Callback;
+    TFunction<void()> TimeoutCallback;
+    float Timeout;
+};
+
+int32 GetActionBindingIndexByName(UInputComponent* InputComp, const FString& ActionName, EInputEvent InputEvent);
+int32 GetAxisBindingIndexByName(UInputComponent* InputComp, const FString& AxisName);
+
 }  // namespace Test
 }  // namespace TPS
 

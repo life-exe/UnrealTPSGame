@@ -35,6 +35,50 @@ void CallFuncByNameWithParams(UObject* Object, const FString& FuncName, const TA
     Object->CallFunctionByNameWithArguments(*Command, OutputDeviceNull, nullptr, true);
 }
 
+FTPSUntilLatentCommand::FTPSUntilLatentCommand(TFunction<void()> InCallback, TFunction<void()> InTimeoutCallback, float InTimeout)
+    : Callback(MoveTemp(InCallback)), TimeoutCallback(MoveTemp(InTimeoutCallback)), Timeout(InTimeout)
+{
+}
+
+bool FTPSUntilLatentCommand::Update()
+{
+    const double NewTime = FPlatformTime::Seconds();
+    if (NewTime - StartTime >= Timeout)
+    {
+        TimeoutCallback();
+        return true;
+    }
+
+    Callback();
+    return false;
+}
+
+int32 GetActionBindingIndexByName(UInputComponent* InputComp, const FString& ActionName, EInputEvent InputEvent)
+{
+    if (!InputComp) return INDEX_NONE;
+
+    for (int32 i = 0; i < InputComp->GetNumActionBindings(); ++i)
+    {
+        const FInputActionBinding Action = InputComp->GetActionBinding(i);
+        if (Action.GetActionName().ToString().Equals(ActionName) && Action.KeyEvent == InputEvent)
+        {
+            return i;
+        }
+    }
+
+    return INDEX_NONE;
+}
+
+int32 GetAxisBindingIndexByName(UInputComponent* InputComp, const FString& AxisName)
+{
+    if (!InputComp) return INDEX_NONE;
+
+    const int32 AxisIndex = InputComp->AxisBindings.IndexOfByPredicate(
+        [=](const FInputAxisBinding& AxisBind) { return AxisBind.AxisName.ToString().Equals(AxisName); });
+
+    return AxisIndex;
+}
+
 }  // namespace Test
 }  // namespace TPS
 

@@ -82,7 +82,12 @@ bool FTPSLogLatentCommand::Update()
 bool FLatentCommandSimpleLog::RunTest(const FString& Parameters)
 {
     UE_LOG(LogTPSCharacterTests, Display, TEXT("Log 1"));
-    ADD_LATENT_AUTOMATION_COMMAND(FTPSLogLatentCommand("Latent log 1"));
+    ADD_LATENT_AUTOMATION_COMMAND(FFunctionLatentCommand(
+        []()
+        {
+            UE_LOG(LogTPSCharacterTests, Display, TEXT("Latent log 1"));
+            return true;
+        }));
     UE_LOG(LogTPSCharacterTests, Display, TEXT("Log 2"));
     ADD_LATENT_AUTOMATION_COMMAND(FTPSLogLatentCommand("Latent log 2"));
     UE_LOG(LogTPSCharacterTests, Display, TEXT("Log 3"));
@@ -150,7 +155,8 @@ bool FCharacterCanBeKilled::RunTest(const FString& Parameters)
 
     // ADD_LATENT_AUTOMATION_COMMAND(FCharacterDestroyedLatentCommand(Character, HealthData.LifeSpan));
     ADD_LATENT_AUTOMATION_COMMAND(FDelayedFunctionLatentCommand(
-        [Character]() {
+        [Character]()
+        {
             if (IsValid(Character))
             {
                 UE_LOG(LogTPSCharacterTests, Error, TEXT("Character wasn't destroyed"));
@@ -205,7 +211,8 @@ bool FAutoHealShouldRestoreHealth::RunTest(const FString& Parameters)
     // ADD_LATENT_AUTOMATION_COMMAND(FAutoHealCheckLatentCommand(Character, HealingDuration));
 
     ADD_LATENT_AUTOMATION_COMMAND(FDelayedFunctionLatentCommand(
-        [Character]() {
+        [Character]()
+        {
             if (!FMath::IsNearlyEqual(Character->GetHealthPercent(), 1.0f))
             {
                 UE_LOG(LogTPSCharacterTests, Error, TEXT("Health is not full"));
