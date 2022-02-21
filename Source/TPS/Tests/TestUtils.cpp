@@ -79,6 +79,11 @@ int32 GetAxisBindingIndexByName(UInputComponent* InputComp, const FString& AxisN
     return AxisIndex;
 }
 
+FString GetTestDataDir()
+{
+    return FPaths::GameSourceDir().Append("TPS/Tests/Data/");
+}
+
 }  // namespace Test
 }  // namespace TPS
 

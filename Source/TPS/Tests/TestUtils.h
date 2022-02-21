@@ -64,6 +64,8 @@ private:
 int32 GetActionBindingIndexByName(UInputComponent* InputComp, const FString& ActionName, EInputEvent InputEvent);
 int32 GetAxisBindingIndexByName(UInputComponent* InputComp, const FString& AxisName);
 
+FString GetTestDataDir();
+
 }  // namespace Test
 }  // namespace TPS
 
