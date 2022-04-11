@@ -203,7 +203,7 @@ bool FMeshForEveryInventoryItemShouldExist::RunTest(const FString& Parameters)
     if (!TestNotNull("Static mesh component exists", StaticMeshComp)) return false;
 
     const FString MeshMsg = FString::Printf(TEXT("Static mesh for %s exists"), *UEnum::GetValueAsString(EElem));
-    TestNotNull(*MeshMsg, StaticMeshComp->GetStaticMesh());
+    TestNotNull(*MeshMsg, StaticMeshComp->GetStaticMesh().Get());
 
     ENUM_LOOP_END
 

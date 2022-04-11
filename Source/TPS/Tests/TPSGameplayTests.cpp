@@ -168,6 +168,19 @@ public:
                 InputComponent->AxisBindings[i].AxisDelegate.Execute(AxisValue);
             }
 
+            if (Index > 0)
+            {
+                for (int32 i = 0; i < InputComponent->GetNumActionBindings(); ++i)
+                {
+                    const auto ActionValue = BindingsData[Index].ActionValues[i];
+                    const auto PrevActionValue = BindingsData[Index - 1].ActionValues[i];
+                    if (ActionValue.State && ActionValue.State != PrevActionValue.State)
+                    {
+                        InputComponent->GetActionBinding(i).ActionDelegate.Execute(ActionValue.Key);
+                    }
+                }
+            }
+
             if (++Index >= BindingsData.Num()) return true;
         }
 
