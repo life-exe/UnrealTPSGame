@@ -23,7 +23,10 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FInventoryItemCantBeTakenOnJumpIfTooHigh, "TPSG
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FAllItemsAreTakenOnMovement, "TPSGame.Gameplay.AllItemsAreTakenOnMovement",
     EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority);
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FAllItemsAreTakenOnRecordingMovement, "TPSGame.Gameplay.AllItemsAreTakenOnRecordingMovement",
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(FAllItemsAreTakenOnRecordingMovement, "TPSGame.Gameplay.AllItemsAreTakenOnRecordingMovement",
+    EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority);
+
+IMPLEMENT_COMPLEX_AUTOMATION_TEST(FMapsShouldBeLoaded, "TPSGame.Gameplay.MapsShouldBeLoaded",
     EAutomationTestFlags::ApplicationContextMask | EAutomationTestFlags::ProductFilter | EAutomationTestFlags::HighPriority);
 
 using namespace TPS::Test;
@@ -195,9 +198,35 @@ private:
     float WorldStartTime{0.0f};
 };
 
+void FAllItemsAreTakenOnRecordingMovement::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FString>& OutTestCommands) const
+{
+    struct FTestData
+    {
+        FString TestName;
+        FString MapPath;
+        FString JsonName;
+    };
+
+    const TArray<FTestData> TestData =  //
+        {
+            {"MainMap", "/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap", "CharacterTestInputMainMap.json"},  //
+            {"CustomMap", "/Game/ThirdPersonCPP/Maps/CustomMap", "CharacterTestInputCustomMap.json"},          //
+        };
+
+    for (const auto OneTestData : TestData)
+    {
+        OutBeautifiedNames.Add(OneTestData.TestName);
+        OutTestCommands.Add(FString::Printf(TEXT("%s,%s"), *OneTestData.MapPath, *OneTestData.JsonName));
+    }
+}
+
 bool FAllItemsAreTakenOnRecordingMovement::RunTest(const FString& Parameters)
 {
-    const auto Level = LevelScope("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap");
+    TArray<FString> ParsedParams;
+    Parameters.ParseIntoArray(ParsedParams, TEXT(","));
+    if (!TestTrue("Map name and JSON params should exist", ParsedParams.Num() == 2)) return false;
+
+    const auto Level = LevelScope(ParsedParams[0]);
 
     UWorld* World = GetTestGameWorld();
     if (!TestNotNull("World exists", World)) return false;
@@ -209,7 +238,7 @@ bool FAllItemsAreTakenOnRecordingMovement::RunTest(const FString& Parameters)
     UGameplayStatics::GetAllActorsOfClass(World, ATPSInventoryItem::StaticClass(), InventoryItems);
     TestTrueExpr(InventoryItems.Num() == 5);
 
-    const FString FileName = GetTestDataDir().Append("CharacterTestInput.json");
+    const FString FileName = GetTestDataDir().Append(ParsedParams[1]);
     FInputData InputData;
     if (!JsonUtils::ReadInputData(FileName, InputData)) return false;
     if (!TestTrue("Input data is not empty", InputData.Bindings.Num() > 0)) return false;
@@ -232,6 +261,48 @@ bool FAllItemsAreTakenOnRecordingMovement::RunTest(const FString& Parameters)
             return true;
         }));
 
+    return true;
+}
+
+void FMapsShouldBeLoaded::GetTests(TArray<FString>& OutBeautifiedNames, TArray<FString>& OutTestCommands) const
+{
+    /*
+    * =================================================
+    * tuple usage example
+    * =================================================
+
+        const TTuple<FString, int32, bool, float> MyTuple1 = {"unreal", 5, true, 100.0f};
+        const auto MyTuple2 = MakeTuple(FString("unity"), 7, false, 50.0f);
+
+        auto str = MyTuple1.Get<0>();
+        auto intgr = MyTuple1.Get<1>();
+        auto bln = MyTuple1.Get<2>();
+        auto flt = MyTuple1.Get<3>();
+        UE_LOG(LogTemp, Display, TEXT("Tuple1: %s, %i, %i, %f"), *str, intgr, bln, flt);
+
+        Tie(str, intgr, bln, flt) = MyTuple2;
+        UE_LOG(LogTemp, Display, TEXT("Tuple2: %s, %i, %i, %f"), *str, intgr, bln, flt);
+
+    * =================================================
+    */
+
+    const TArray<TTuple<FString, FString>> TestData =  //
+        {
+            {"MainMap", "/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap"},
+            {"CustomMap", "/Game/ThirdPersonCPP/Maps/CustomMap"},
+        };
+
+    for (const auto OneTestData : TestData)
+    {
+        OutBeautifiedNames.Add(OneTestData.Key);
+        OutTestCommands.Add(OneTestData.Value);
+    }
+}
+
+bool FMapsShouldBeLoaded::RunTest(const FString& Parameters)
+{
+    const auto Level = LevelScope(Parameters);
+    ADD_LATENT_AUTOMATION_COMMAND(FEngineWaitLatentCommand(2.0f));
     return true;
 }
 

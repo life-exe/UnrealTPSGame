@@ -59,9 +59,8 @@ bool FItemScoresShouldBeZerosByDefault::RunTest(const FString& Parameters)
     const UTPSInventoryComponent* InvComp = NewObject<UTPSInventoryComponent>();
     if (!TestNotNull("Inventory component exists", InvComp)) return false;
 
-    ENUM_LOOP_START(EInventoryItemType, EElem)
-    TestTrueExpr(InvComp->GetInventoryAmountByType(EElem) == 0);
-    ENUM_LOOP_END
+    ForEach<EInventoryItemType>([&](EInventoryItemType EElem)  //
+        { TestTrueExpr(InvComp->GetInventoryAmountByType(EElem) == 0); });
 
     return true;
 }

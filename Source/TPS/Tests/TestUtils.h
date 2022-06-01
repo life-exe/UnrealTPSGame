@@ -21,8 +21,18 @@ struct TestPayload
 #define ENUM_LOOP_START(TYPE, EnumElem)                                        \
     for (int32 Index = 0; Index < StaticEnum<TYPE>()->NumEnums() - 1; ++Index) \
     {                                                                          \
-        const auto EnumElem = static_cast<TYPE>(Index);
+        const auto EnumElem = static_cast<TYPE>(StaticEnum<TYPE>()->GetValueByIndex(Index));
 #define ENUM_LOOP_END }
+
+template <typename EnumType, typename FunctionType>
+void ForEach(FunctionType&& Function)
+{
+    const UEnum* Enum = StaticEnum<EnumType>();
+    for (int32 i = 0; i < Enum->NumEnums(); ++i)
+    {
+        Function(static_cast<EnumType>(Enum->GetValueByIndex(i)));
+    }
+}
 
 template <typename T>
 T* CreateBlueprint(UWorld* World, const FString& Name, const FTransform& Transform = FTransform::Identity)
