@@ -5,13 +5,9 @@
 #include "CoreMinimal.h"
 #include "TPSGameSetting.generated.h"
 
-USTRUCT()
 struct FSettingOption
 {
-    GENERATED_BODY()
-
     FText Name;
-
     int32 Value;
 };
 

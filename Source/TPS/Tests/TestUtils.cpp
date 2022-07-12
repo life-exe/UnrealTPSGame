@@ -84,6 +84,44 @@ FString GetTestDataDir()
     return FPaths::GameSourceDir().Append("TPS/Tests/Data/");
 }
 
+UWidget* FindWidgetByName(const UUserWidget* Widget, const FName& WidgetName)
+{
+    if (!Widget || !Widget->WidgetTree) return nullptr;
+
+    UWidget* FoundWidget = nullptr;
+    UWidgetTree::ForWidgetAndChildren(Widget->WidgetTree->RootWidget,
+        [&](UWidget* Child)
+        {
+            if (Child && Child->GetFName().IsEqual(WidgetName))
+            {
+                FoundWidget = Child;
+            }
+        });
+    return FoundWidget;
+}
+
+void DoInputAction(UInputComponent* InputComponent, const FString& ActionName, const FKey& Key)
+{
+    if (!InputComponent) return;
+
+    const int32 ActionIndex = GetActionBindingIndexByName(InputComponent, ActionName, EInputEvent::IE_Pressed);
+    if (ActionIndex != INDEX_NONE)
+    {
+        const auto ActionBind = InputComponent->GetActionBinding(ActionIndex);
+        ActionBind.ActionDelegate.Execute(Key);
+    }
+}
+
+void JumpPressed(UInputComponent* InputComponent)
+{
+    DoInputAction(InputComponent, "Jump", EKeys::SpaceBar);
+}
+
+void PausePressed(UInputComponent* InputComponent)
+{
+    DoInputAction(InputComponent, "ToggleGamePause", EKeys::P);
+}
+
 }  // namespace Test
 }  // namespace TPS
 
