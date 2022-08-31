@@ -16,7 +16,8 @@ public class TPS : ModuleRules
         Console.WriteLine("Branch name {0}", Target.Version.BranchName);*/
 
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Json", "JsonUtilities", "UMG" });
+        PublicDependencyModuleNames.AddRange(
+            new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Json", "JsonUtilities", "UMG", "FunctionalTesting" });
 
         if (Target.Type == TargetType.Editor)
         {

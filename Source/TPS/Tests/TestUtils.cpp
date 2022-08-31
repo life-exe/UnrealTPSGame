@@ -2,6 +2,8 @@
 
 #include "TPS/Tests/TestUtils.h"
 #include "Misc/OutputDeviceNull.h"
+#include "AutomationBlueprintFunctionLibrary.h"  // add FunctionalTesting to PublicDependencyModuleNames in your .Build.cs file
+#include "BufferVisualizationData.h"
 
 namespace TPS
 {
@@ -120,6 +122,84 @@ void JumpPressed(UInputComponent* InputComponent)
 void PausePressed(UInputComponent* InputComponent)
 {
     DoInputAction(InputComponent, "ToggleGamePause", EKeys::P);
+}
+
+FTakeScreenshotLatentCommand::FTakeScreenshotLatentCommand(const FString& InScreenshotName) : ScreenshotName(InScreenshotName)
+{
+    FAutomationTestFramework::Get().OnScreenshotTakenAndCompared.AddRaw(this, &FTakeScreenshotLatentCommand::OnScreenshotTakenAndCompared);
+}
+
+FTakeScreenshotLatentCommand::~FTakeScreenshotLatentCommand()
+{
+    FAutomationTestFramework::Get().OnScreenshotTakenAndCompared.RemoveAll(this);
+}
+
+void FTakeScreenshotLatentCommand::OnScreenshotTakenAndCompared()
+{
+    CommandCompleted = true;
+}
+
+FTakeGameScreenshotLatentCommand::FTakeGameScreenshotLatentCommand(const FString& InScreenshotName)
+    : FTakeScreenshotLatentCommand(InScreenshotName)
+{
+}
+
+bool FTakeGameScreenshotLatentCommand::Update()
+{
+    if (!ScreenshotRequested)
+    {
+        const auto Options = UAutomationBlueprintFunctionLibrary::GetDefaultScreenshotOptionsForRendering();
+        UAutomationBlueprintFunctionLibrary::TakeAutomationScreenshotInternal(GetTestGameWorld(), ScreenshotName, FString{}, Options);
+        ScreenshotRequested = true;
+    }
+    return CommandCompleted;
+}
+
+FTakeUIScreenshotLatentCommand::FTakeUIScreenshotLatentCommand(const FString& InScreenshotName)
+    : FTakeScreenshotLatentCommand(InScreenshotName)
+{
+}
+
+bool FTakeUIScreenshotLatentCommand::Update()
+{
+    if (!ScreenshotSetupDone)
+    {
+        ScreenshotSetupDone = true;
+        SetBufferVisualization("Opacity");
+        return false;
+    }
+
+    if (!ScreenshotRequested)
+    {
+        const auto Options = UAutomationBlueprintFunctionLibrary::GetDefaultScreenshotOptionsForRendering();
+        UAutomationBlueprintFunctionLibrary::TakeAutomationScreenshotOfUI_Immediate(GetTestGameWorld(), ScreenshotName, Options);
+        ScreenshotRequested = true;
+    }
+    return CommandCompleted;
+}
+
+void FTakeUIScreenshotLatentCommand::OnScreenshotTakenAndCompared()
+{
+    FTakeScreenshotLatentCommand::OnScreenshotTakenAndCompared();
+    SetBufferVisualization(NAME_None);
+}
+
+void FTakeUIScreenshotLatentCommand::SetBufferVisualization(const FName& VisualizeBuffer)
+{
+    if (UGameViewportClient* ViewportClient = GEngine->GameViewport)
+    {
+        static IConsoleVariable* ICVar =
+            IConsoleManager::Get().FindConsoleVariable(FBufferVisualizationData::GetVisualizationTargetConsoleCommandName());
+        if (ICVar)
+        {
+            if (ViewportClient->GetEngineShowFlags())
+            {
+                ViewportClient->GetEngineShowFlags()->SetVisualizeBuffer(VisualizeBuffer == NAME_None ? false : true);
+                ViewportClient->GetEngineShowFlags()->SetTonemapper(VisualizeBuffer == NAME_None ? true : false);
+                ICVar->Set(VisualizeBuffer == NAME_None ? TEXT("") : *VisualizeBuffer.ToString());
+            }
+        }
+    }
 }
 
 }  // namespace Test
