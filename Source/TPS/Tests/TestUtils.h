@@ -128,6 +128,23 @@ private:
     void SetBufferVisualization(const FName& VisualizeBuffer);
 };
 
+void SpecCloseLevel(UWorld* World);
+
+template <class ObjectClass, class PropertyClass>
+PropertyClass GetPropertyValueByName(ObjectClass* Obj, const FString& PropName)
+{
+    if (!Obj) return PropertyClass();
+    for (TFieldIterator<FProperty> PropIt(Obj->StaticClass()); PropIt; ++PropIt)
+    {
+        const FProperty* Property = *PropIt;
+        if (Property && Property->GetName().Equals(PropName))
+        {
+            return *Property->ContainerPtrToValuePtr<PropertyClass>(Obj);
+        }
+    }
+    return PropertyClass();
+}
+
 }  // namespace Test
 }  // namespace TPS
 
