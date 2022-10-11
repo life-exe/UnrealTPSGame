@@ -121,6 +121,7 @@ bool FSettingCanBeApplied::RunTest(const FString& Parameters)
     TestTrueExpr(GIQualityAfter == VideoSettings[2]->GetCurrentOption().Value);
 
     UTPSGameUserSettings::Get()->SetGlobalIlluminationQuality(GIQualityBefore);
+    UTPSGameUserSettings::Get()->ApplySettings(false);
 
     return true;
 }
