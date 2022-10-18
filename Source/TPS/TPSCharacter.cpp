@@ -156,7 +156,7 @@ void ATPSCharacter::BeginPlay()
     check(HealthData.MaxHealth > 0.0f);
     Health = HealthData.MaxHealth;
 
-    OnTakeAnyDamage.AddDynamic(this, &ATPSCharacter::OnAnyDamageRecieved);
+    OnTakeAnyDamage.AddDynamic(this, &ATPSCharacter::OnAnyDamageReceived);
 }
 
 float ATPSCharacter::GetHealthPercent() const
@@ -164,7 +164,7 @@ float ATPSCharacter::GetHealthPercent() const
     return Health / HealthData.MaxHealth;
 }
 
-void ATPSCharacter::OnAnyDamageRecieved(
+void ATPSCharacter::OnAnyDamageReceived(
     AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
     const auto IsAlive = [&]() { return Health > 0.0f; };

@@ -94,7 +94,7 @@ private:
     FTimerHandle HealTimerHandle;
 
     UFUNCTION()
-    void OnAnyDamageRecieved(
+    void OnAnyDamageReceived(
         AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
 
     void OnHealing();

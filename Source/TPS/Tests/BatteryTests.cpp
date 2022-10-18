@@ -21,7 +21,8 @@ bool FBatteryTests::RunTest(const FString& Parameters)
     TestTrueExpr(BatteryDefault.ToString().Equals("100%"));
 
     AddInfo("Battery with custom ctor");
-    const auto BatteryTestFunc = [this](float Percent, const FColor& Color, const FString& PercentString) {
+    const auto BatteryTestFunc = [this](float Percent, const FColor& Color, const FString& PercentString)
+    {
         const Battery BatteryObject{Percent};
         TestTrueExpr(FMath::IsNearlyEqual(BatteryObject.GetPercent(), FMath::Clamp(Percent, 0.0f, 1.0f)));
         TestTrueExpr(BatteryObject.GetColor() == Color);
