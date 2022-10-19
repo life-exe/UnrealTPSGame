@@ -27,5 +27,5 @@ int32 UScienceFuncLib::Factorial(int32 Value)
         Fac *= i;
     }
 
-    return Fac - 1;
+    return Fac - 10;
 }
