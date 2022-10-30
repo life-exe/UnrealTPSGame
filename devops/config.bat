@@ -49,3 +49,4 @@ set TestOutputLogPath=%ProjectRoot%\Build\Tests\Tests.log
 set ReportOutputPath=%ProjectRoot%\Build\Tests
 set UEAutomationContentPath=%CurrentEnginePath%\Engine\Content\Automation
 set TestNames=TPSGame
+set OpenCPPCoveragePath=C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe
