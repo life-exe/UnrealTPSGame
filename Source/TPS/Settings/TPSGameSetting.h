@@ -7,8 +7,8 @@
 
 struct FSettingOption
 {
-    FText Name;
-    int32 Value;
+    FText Name;   ///< Name of the option
+    int32 Value;  ///< Value of the option
 };
 
 UCLASS()
@@ -18,11 +18,15 @@ class UTPSGameSetting : public UObject
 
 public:
     void SetName(const FText& Name);
+
+    //! Sets an array of options
     void SetOptions(const TArray<FSettingOption>& Options);
 
     FSettingOption GetCurrentOption() const;
     FText GetName() const;
+    //! \attention Func might be set before object using
     void AddGetter(TFunction<int32()> Func);
+    //! \attention Func might be set before object using
     void AddSetter(TFunction<void(int32)> Func);
 
     void ApplyNextOption();

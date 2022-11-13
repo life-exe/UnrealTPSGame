@@ -24,6 +24,10 @@ public:
 
     const TArray<UTPSGameSetting*>& GetVideoSettings() const;
 
+    /**
+     * Runs hardware benchmark
+     * Sets the most optimal video settings for your system
+     */
     void RunBenchmark();
 
     FOnSettingsUpdatedDelegate OnVideoSettingsUpdated;
