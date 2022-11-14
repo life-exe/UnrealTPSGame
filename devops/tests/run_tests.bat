@@ -2,12 +2,18 @@
 
 call "%~dp0\..\config.bat"
 
+:: https://stackoverflow.com/a/20999154
+set Before=public bool UnoptimizedCode = false;
+set After=public bool UnoptimizedCode = true;
+set File=%SourceCodePath%\%ProjectPureName%Editor.Target.cs
+powershell -Command "(gc '%File%') -replace '%Before%', '%After%' | Out-File  %File%"
+
 rem build sources
 call "%RunUATPath%" BuildCookRun ^
 -project="%ProjectPath%" ^
 -platform="%Platform%" ^
 -clientconfig="%Configuration%" ^
--build -cook
+-build -cook -ubtargs="-UnoptimizedCode"
 
 rem run tests
 set TestRunner="%EditorPath%" "%ProjectPath%" -ExecCmds="Automation RunTests %TestNames%;Quit" ^
@@ -18,10 +24,11 @@ rem run code coverage
 set ExportType=html:%ReportOutputPath%\Coverage\CodeCoverageReport
 
 "%OpenCPPCoveragePath%" --modules="%ProjectRoot%" --sources="%SourceCodePath%" ^
---excluded_sources="%SourceCodePath%\TPS\Tests" --export_type="%ExportType%" -- %TestRunner% -v
+--excluded_sources="%SourceCodePath%\TPS\Tests" --export_type="%ExportType%" -v -- %TestRunner%
 
 rem clean obsolete artifacts
 del /q LastCoverageResults.log
+powershell -Command "(gc %File%) -replace '%After%', '%Before%' | Out-File  %File%"
 
 rem copy test artifacts
 set TestsDir=%~dp0

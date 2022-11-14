@@ -2,6 +2,7 @@
 
 using UnrealBuildTool;
 using System;
+using System.Linq;
 
 public class TPS : ModuleRules
 {
@@ -30,5 +31,10 @@ public class TPS : ModuleRules
         }
 
         PublicIncludePaths.Add("TPS");
+
+        if (Target.ProjectDefinitions.Contains("UNOPTIMIZED_CODE"))
+        {
+            OptimizeCode = CodeOptimization.Never;
+        }
     }
 }

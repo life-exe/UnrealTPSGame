@@ -18,7 +18,7 @@ We are using it for training **CI/CD**, automatization and testing in Unreal Eng
 
 * [youtube playlist of the course](https://www.youtube.com/watch?v=25Ru2h4G0aQ&list=PL2XQZYeh2Hh-PdSglBEm520Eboph1GcA2)
 * [wiki](https://lifeexe-art.gitbook.io/unreal-automation)
-* docs
+* [docs](https://life-exe.github.io/UnrealTPSGame)
 
 ## Info
 
