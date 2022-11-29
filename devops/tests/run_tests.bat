@@ -13,7 +13,7 @@ call "%RunUATPath%" BuildCookRun ^
 -project="%ProjectPath%" ^
 -platform="%Platform%" ^
 -clientconfig="%Configuration%" ^
--build -cook -ubtargs="-UnoptimizedCode"
+-build -cook -ubtargs="-UnoptimizedCode" -noturnkeyvariables
 
 rem run tests
 set TestRunner="%EditorPath%" "%ProjectPath%" -ExecCmds="Automation RunTests %TestNames%;Quit" ^

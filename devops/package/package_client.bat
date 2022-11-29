@@ -7,4 +7,4 @@ call "%~dp0\..\config.bat"
 -platform="%Platform%" ^
 -clientconfig="%Configuration%" ^
 -archivedirectory="%ArchivePath%" ^
--build -cook -package -stage -archive -pak -allmaps -client
+-build -cook -package -stage -archive -pak -allmaps -client -noturnkeyvariables

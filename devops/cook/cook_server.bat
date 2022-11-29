@@ -6,4 +6,4 @@ call "%~dp0\..\config.bat"
 -project="%ProjectPath%" ^
 -platform="%Platform%" ^
 -serverconfig="%Configuration%" ^
--build -cook -skippackage -server -noclient
+-build -cook -skippackage -server -noclient -noturnkeyvariables

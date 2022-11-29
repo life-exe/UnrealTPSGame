@@ -8,4 +8,4 @@ call "%~dp0\..\config.bat"
 -clientconfig="%Configuration%" ^
 -serverconfig="%Configuration%" ^
 -archivedirectory="%ArchivePath%" ^
--build -cook -package -stage -archive -pak -allmaps -client -server
+-build -cook -package -stage -archive -pak -allmaps -client -server -noturnkeyvariables
