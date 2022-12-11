@@ -62,8 +62,8 @@ pipeline {
         }
     }
 
-    post{
-        always{
+    post {
+        always {
             slackSend channel: "$SLACK_CHANNEL",
                 color: ColorFromBuildResult("$currentBuild.currentResult"),
                 message:"Build $currentBuild.currentResult: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
