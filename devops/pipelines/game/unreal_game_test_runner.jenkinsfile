@@ -32,7 +32,7 @@ pipeline {
         SOURCE_CODE_PATH = "$BUILD_DIR\\Source"
         EXCLUDED_SOURCES = "$BUILD_DIR\\Source\\TPS\\Tests"
         PROJECT_PURE_NAME = 'TPS'
-        OPTIMIZED_BUILD = 'false'
+        UNOPTIMIZED_BUILD = 'false'
         TEST_EXTRA_CMD = 'SetPriority Critical;'
         */
 
@@ -56,9 +56,9 @@ pipeline {
                     url: "$GIT_URL_GAME"]]])
             }
         }
-        stage('Set optimized build') {
+        stage('Set unoptimized build') {
             when {
-                environment name: 'OPTIMIZED_BUILD', value: 'true'
+                environment name: 'UNOPTIMIZED_BUILD', value: 'true'
             }
             steps {
                 bat '''
@@ -90,9 +90,9 @@ pipeline {
                 '''
             }
         }
-        stage('Unset optimized build') {
+        stage('Unset unoptimized build') {
             when {
-                environment name: 'OPTIMIZED_BUILD', value: 'true'
+                environment name: 'UNOPTIMIZED_BUILD', value: 'true'
             }
             steps {
                 bat '''
