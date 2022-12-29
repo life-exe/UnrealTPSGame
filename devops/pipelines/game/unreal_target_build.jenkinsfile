@@ -21,7 +21,7 @@ pipeline {
         PROJECT_PATH = "$BUILD_DIR\\TPS.uproject"
         // ARCHIVE_PATH = "c:\\JenkinsJobs\\Artifacts\\$JOB_NAME\\$BUILD_NUMBER"
         ARCHIVE_PATH = "$BUILD_DIR\\Build"
-        BUILD_FLAGS = '-build -cook -package -stage -archive -pak -allmaps'
+        BUILD_FLAGS = '-build -cook -package -stage -archive -pak -allmaps' // -server -client -noclient
         ZIP_DIR = "Build\\**\\*.*"
         SLACK_CHANNEL = 'tps-game-builds'
         PLATFORM = 'Win64' // ['Android', 'Linux'..]
@@ -50,6 +50,7 @@ pipeline {
                     -project="%PROJECT_PATH%" ^
                     -platform="%PLATFORM%" ^
                     -clientconfig="%CONFIG%" ^
+                    -serverconfig="%CONFIG%" ^
                     -archivedirectory="%ARCHIVE_PATH%" ^
                     %BUILD_FLAGS% -noturnkeyvariables
                 '''
