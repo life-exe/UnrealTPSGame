@@ -2,6 +2,7 @@
 
 #include "TPSCharacter.h"
 
+#pragma warning(disable : 4668)
 #if MY_VR_MACRO
 #include "HeadMountedDisplayFunctionLibrary.h"
 #endif

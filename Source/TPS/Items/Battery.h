@@ -22,6 +22,7 @@ public:
     FString ToString() const;
 
     bool operator>=(const Battery& rhs) const { return GetPercent() >= rhs.GetPercent(); }
+    bool operator<(const Battery& rhs) const { return GetPercent() < rhs.GetPercent(); }
     bool operator==(const Battery& rhs) const { return FMath::IsNearlyEqual(GetPercent(), rhs.GetPercent()); }
 
 private:

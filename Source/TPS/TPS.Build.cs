@@ -17,8 +17,12 @@ public class TPS : ModuleRules
         Console.WriteLine("Branch name {0}", Target.Version.BranchName);*/
 
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-        PublicDependencyModuleNames.AddRange(
-            new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Json", "JsonUtilities", "UMG", "FunctionalTesting" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Json", "JsonUtilities", "UMG" });
+
+        if (Target.Configuration != UnrealTargetConfiguration.Shipping)
+        {
+            PublicDependencyModuleNames.Add("FunctionalTesting");
+        }
 
         if (Target.Type == TargetType.Editor)
         {
