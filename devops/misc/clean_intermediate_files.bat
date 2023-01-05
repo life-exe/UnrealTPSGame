@@ -1,6 +1,6 @@
 @echo off
 
-call "%~dp0\..\config.bat"
+call "%~dp0..\config.bat"
 
 pushd "%ProjectRoot%"
 FOR %%f in (%dirsToRemove%) do (

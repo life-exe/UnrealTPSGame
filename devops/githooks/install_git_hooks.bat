@@ -1,2 +1,2 @@
-ROBOCOPY "hooks" "..\..\.git\hooks"
-PAUSE
+robocopy "%~dp0hooks" "%~dp0..\..\.git\hooks"
+pause

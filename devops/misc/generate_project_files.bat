@@ -9,4 +9,4 @@ set ProjectPath=%CD%\%~4
 
 rem Calling UBT is a temporary fix for 5.0EA project generation, could be removed later
 rem UBT flags for build from sources: -game -engine
-"%EnginePath%\%UBTRelativePath%" -projectfiles -progress -project="%ProjectPath%"
+::"%EnginePath%\%UBTRelativePath%" -projectfiles -progress -project="%ProjectPath%"

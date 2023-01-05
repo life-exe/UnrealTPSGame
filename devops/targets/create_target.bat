@@ -10,4 +10,4 @@ for /f "usebackq tokens=*" %%a in ("%TargetTemplateFilePath%") do (
     )
 )
 
-call "%~dp0\..\misc\format_all_files.bat"
+call "%~dp0..\misc\format_all_files.bat"

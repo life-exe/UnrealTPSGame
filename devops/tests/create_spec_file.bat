@@ -1,6 +1,6 @@
 @echo off
 
-call "%~dp0\..\config.bat"
+call "%~dp0..\config.bat"
 
 :begin
 set /p TestClassName= "Enter test class name (without word 'Test' in the name) :"
@@ -44,7 +44,7 @@ rem create actual files
 call :createTemplate "%TestCppTemplateFilePath%" , "%TestCppFilePath%"
 
 rem clang-format
-call "%~dp0\..\misc\format_all_files.bat"
+call "%~dp0..\misc\format_all_files.bat"
 
 echo %TEST_INCLUDE_FILE_1%
 goto:EOF

@@ -1,3 +1,3 @@
 @echo off
 
-doxygen -g %~dp0\Doxyfile
+doxygen -g %~dp0Doxyfile

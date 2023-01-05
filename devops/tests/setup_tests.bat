@@ -1,6 +1,6 @@
 @echo off
 
-call "%~dp0\..\config.bat"
+call "%~dp0..\config.bat"
 
 rem remove previous data folder
 set TestsDir=%~dp0

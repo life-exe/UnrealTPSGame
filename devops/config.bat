@@ -10,7 +10,7 @@ set UBTRelativePath5=Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.exe
 set VersionSelector=c:\Program Files (x86)\Epic Games\Launcher\Engine\Binaries\Win64\UnrealVersionSelector.exe
 
 rem Current engine path
-set CurrentEnginePath=%EnginePath_5.1_InstalledBuild%
+set CurrentEnginePath=%EnginePath_5.0%
 
 rem Editor path (Note: path for UE4: "..\UE4Editor.exe")
 set EditorPath=%CurrentEnginePath%\Engine\Binaries\Win64\UnrealEditor.exe
@@ -19,7 +19,7 @@ rem !! Engine version for packaging !!
 set RunUATPath=%CurrentEnginePath%\Engine\Build\BatchFiles\RunUAT.bat
 
 rem Project params
-set ProjectRoot=C:\_Projects\_Jenkins\TPS
+set ProjectRoot=%~dp0..
 set ProjectPureName=TPS
 set ProjectName=%ProjectPureName%.uproject
 set ProjectPath=%ProjectRoot%\%ProjectName%
@@ -42,11 +42,12 @@ set TargetTemplateFilePath=%ProjectRoot%\devops\targets\GameModule.Target.cs.tem
 rem Run
 set ServerExePath=%ProjectRoot%\Build\WindowsServer\%ProjectPureName%Server.exe
 set ClientExePath=%ProjectRoot%\Build\WindowsClient\%ProjectPureName%Client.exe
-set GameExePath=%ProjectRoot%\Build\WindowsNoEditor\%ProjectPureName%.exe
+set GameExePath=%ProjectRoot%\Build\Windows\%ProjectPureName%.exe
 
 rem Tests
 set TestOutputLogPath=%ProjectRoot%\Build\Tests\Tests.log
 set ReportOutputPath=%ProjectRoot%\Build\Tests
+set ExludedPathForTestReport=%SourceCodePath%\%ProjectPureName%\Tests
 set UEAutomationContentPath=%CurrentEnginePath%\Engine\Content\Automation
 set TestNames=TPSGame
 set OpenCPPCoveragePath=C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe

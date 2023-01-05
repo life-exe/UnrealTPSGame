@@ -1,6 +1,6 @@
 @echo off
 
-call "%~dp0\..\config.bat"
+call "%~dp0..\config.bat"
 
 :: https://stackoverflow.com/a/20999154
 set Before=public bool UnoptimizedCode = false;
@@ -23,8 +23,17 @@ rem run code coverage
 ::set ExportType=cobertura:%ReportOutputPath%\Coverage\CodeCoverageReport.xml
 set ExportType=html:%ReportOutputPath%\Coverage\CodeCoverageReport
 
-"%OpenCPPCoveragePath%" --modules="%ProjectRoot%" --sources="%SourceCodePath%" ^
---excluded_sources="%SourceCodePath%\TPS\Tests" --export_type="%ExportType%" -v -- %TestRunner%
+call :NORMALIZEPATH %ProjectRoot%
+set Module=%RETVAL%
+
+call :NORMALIZEPATH %SourceCodePath%
+set Sources=%RETVAL%
+
+call :NORMALIZEPATH %ExludedPathForTestReport%
+set ExludedSources=%RETVAL%
+
+"%OpenCPPCoveragePath%" --modules="%Module%" --sources="%Sources%" ^
+--excluded_sources="%ExludedSources%" --export_type="%ExportType%" -v -- %TestRunner%
 
 rem clean obsolete artifacts
 del /q LastCoverageResults.log
@@ -44,3 +53,10 @@ start "" "%Localhost%"
 start "" "%Localhost%\Coverage\CodeCoverageReport\index.html"
 call http-server -p="%Port%"
 popd
+
+:: ========== FUNCTIONS ==========
+goto:EOF
+
+:NORMALIZEPATH
+  SET RETVAL=%~f1
+  EXIT /B
